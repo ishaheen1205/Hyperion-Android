@@ -1,0 +1,32 @@
+name: Build APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Hyperion Sample APK
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout source
+      uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 17
+
+    - name: Grant execute permission
+      run: chmod +x ./gradlew
+
+    - name: Build Debug APK
+      run: ./gradlew :sample:assembleDebug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: HyperionSample-debug.apk
+        path: sample/build/outputs/apk/debug/sample-debug.apk
+        
